@@ -11,9 +11,19 @@
         android:id="@+id/mainButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="184dp"
-        android:layout_marginTop="724dp"
+        android:layout_marginLeft="108dp"
+        android:layout_marginTop="624dp"
         android:text="Go to second activity"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="168dp"
+        android:layout_marginTop="392dp"
+        android:text="Hello World!"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

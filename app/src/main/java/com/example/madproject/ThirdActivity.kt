@@ -23,10 +23,6 @@ class ThirdActivity : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
-        val buttonNext2: Button = findViewById(R.id.mainButton2)
-        buttonNext.setOnClickListener {
-            val intent = Intent(this, SecondActivity::class.java)
-            startActivity(intent)
-        }
+
     }
 }
