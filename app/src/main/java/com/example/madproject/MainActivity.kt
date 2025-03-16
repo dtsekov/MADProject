@@ -17,6 +17,10 @@ import androidx.core.app.ActivityCompat
 import android.Manifest
 import android.os.Build
 import android.util.Log
+import android.widget.Toast
+import android.app.AlertDialog
+import android.widget.EditText
+
 
 
 
@@ -26,6 +30,8 @@ class MainActivity : AppCompatActivity(), LocationListener {
     private val TAG = "btaMainActivity"
     private lateinit var locationManager: LocationManager
     private val locationPermissionCode = 2
+    private lateinit var latestLocation:Location
+    private var userID = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,7 +67,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5f, this)
         }
 
-        val latestLocation: Location? = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+        //val latestLocation: Location? = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
         val buttonOsm: Button = findViewById(R.id.osmButton)
         buttonOsm.setOnClickListener {
 
@@ -81,8 +87,41 @@ class MainActivity : AppCompatActivity(), LocationListener {
             val intent = Intent(this, SecondActivity::class.java)
           startActivity(intent)
         }
+        val userIdentifierButton: Button = findViewById(R.id.user)
+        userIdentifierButton.setOnClickListener {
+            showUserIdentifierDialog()
+            updateUserID()
+        }
+
 
     }
+    private fun updateUserID (){
+        val textView: TextView = findViewById(R.id.textView)
+        textView.text = "${latestLocation.latitude}, ${latestLocation.longitude}, UserID: " + userID
+    }
+
+    private fun showUserIdentifierDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Enter User Identifier")
+        val input = EditText(this)
+        builder.setView(input)
+        builder.setPositiveButton("OK") { dialog, which ->
+            val userInput = input.text.toString()
+            if (userInput.isNotBlank()) {
+                Toast.makeText(this, "User ID saved: $userInput", Toast.LENGTH_LONG).show()
+                userID = userInput
+
+            } else {
+                Toast.makeText(this, "User ID cannot be blank", Toast.LENGTH_LONG).show()
+            }
+        }
+        builder.setNegativeButton("Cancel") { dialog, which ->
+            Toast.makeText(this, "Thanks and goodbye!", Toast.LENGTH_LONG).show()
+            dialog.cancel()
+        }
+        builder.show()
+    }
+
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -107,8 +146,12 @@ class MainActivity : AppCompatActivity(), LocationListener {
 
 
     override fun onLocationChanged(location: Location) {
+        latestLocation = location;
         val textView: TextView = findViewById(R.id.textView)
-        textView.text = "${location.latitude}, ${location.longitude}"
+        textView.text = "${location.latitude}, ${location.longitude}, UserID: " + userID
+        val toastText = "New location: ${location.latitude}, ${location.longitude}"
+        Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show()
+
     }
 
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}

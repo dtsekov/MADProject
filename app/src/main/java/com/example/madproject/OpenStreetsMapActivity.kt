@@ -78,7 +78,7 @@ class OpenStreetsMapActivity : AppCompatActivity() {
 
         map = findViewById(R.id.map)
         map.setTileSource(TileSourceFactory.MAPNIK)
-        map.controller.setZoom(20.0)
+        map.controller.setZoom(5.0)
         map.controller.setCenter(startPoint)
 
         // Add current location marker
