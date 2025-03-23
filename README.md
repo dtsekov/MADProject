@@ -1,7 +1,7 @@
 Github:
 • Repository: https://github.com/dtsekov/MADProject
 • Releases: https://github.com/dtsekov/MADProject/releases
-Workspace: https://upm365-my.sharepoint.com/:v:/g/personal/d_tsekov_alumnos_upm_es/EUKTsN3HeQ1ArZU1f7iSAPkB0daXFvBnJGkuzpujnjjlww?e=tPHJjc&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D
+Workspace: https://upm365.sharepoint.com/sites/MADProject/SitePages/Tracking.aspx?login_hint=d.tsekov%40alumnos.upm.es
 Description
 
 
