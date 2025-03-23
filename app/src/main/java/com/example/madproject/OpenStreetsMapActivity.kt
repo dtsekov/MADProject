@@ -128,4 +128,5 @@ class OpenStreetsMapActivity : AppCompatActivity() {
         map.overlays.add(polyline)
     }
 
+
 }

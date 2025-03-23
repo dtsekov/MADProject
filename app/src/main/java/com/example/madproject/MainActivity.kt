@@ -83,6 +83,9 @@ class MainActivity : AppCompatActivity(), LocationListener {
         val buttonNext: Button = findViewById(R.id.mainButton)
         buttonNext.setOnClickListener {
             val intent = Intent(this, SecondActivity::class.java)
+            val bundle = Bundle()
+            bundle.putParcelable("location", latestLocation)
+            intent.putExtra("locationBundle", bundle)
             startActivity(intent)
         }
         val userIdentifierButton: Button = findViewById(R.id.user)
