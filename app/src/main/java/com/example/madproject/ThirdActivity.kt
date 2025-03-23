@@ -8,6 +8,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.bottomnavigation.BottomNavigationView
+
 
 class ThirdActivity : AppCompatActivity() {
     private val TAG = "btaThirdActivity"
@@ -33,6 +35,9 @@ class ThirdActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+
+
     }
 
 

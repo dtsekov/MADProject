@@ -21,6 +21,8 @@ import android.widget.ListView
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import com.google.android.material.bottomnavigation.BottomNavigationView
+
 
 class SecondActivity : AppCompatActivity() {
     private val TAG = "btaSecondActivity"
@@ -62,9 +64,6 @@ class SecondActivity : AppCompatActivity() {
 
         val adapter = CoordinatesAdapter(this, readFileContents())
         listView.adapter = adapter
-
-
-
 
     }
 
