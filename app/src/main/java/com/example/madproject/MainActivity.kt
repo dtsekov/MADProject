@@ -19,10 +19,14 @@ import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import android.app.AlertDialog
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.EditText
 import java.io.File
 import android.widget.Switch
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.appcompat.widget.Toolbar
+
 
 
 
@@ -125,10 +129,27 @@ class MainActivity : AppCompatActivity(), LocationListener {
                 else -> false
             }
         }
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+    }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
+        return true
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_settings -> {
+                startActivity(Intent(this, SettingsActivity::class.java))
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
 
-    private fun saveUserIdentifier(userIdentifier: String) {
+
+        private fun saveUserIdentifier(userIdentifier: String) {
         val sharedPreferences = this.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
         sharedPreferences.edit().apply {
             putString("userIdentifier", userIdentifier)
