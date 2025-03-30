@@ -10,6 +10,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.io.IOException
+import androidx.lifecycle.lifecycleScope
+import com.example.madproject.room.AppDatabase
+import com.example.madproject.room.CoordinatesEntity
+import kotlinx.coroutines.launch
 
 
 class ThirdActivity : AppCompatActivity() {
@@ -38,15 +43,44 @@ class ThirdActivity : AppCompatActivity() {
             finish()
         }
         val textView: TextView = findViewById(R.id.textView)
-        textView.text = "Latitude: $latitude, Longitude: $longitude, Altitude: $altitude"
+       /* val test = readFileContentsDatabase()
+        textView.text = test[0][0].replace("\"", "")
+        for(list in test){
+            val code = list[0]
+            val latitude = list[10].toDouble()
+            val longitude = list[11].toDouble()
+            saveCoordinatesToDatabase(latitude, longitude, code)
+    }*/
 
 
+    textView.text = "Latitude: $latitude, Longitude: $longitude, Altitude: $altitude"
 
 
+}
+
+
+    private fun saveCoordinatesToDatabase(latitude: Double, longitude: Double, code: String) {
+        val coordinates = CoordinatesEntity(
+            code = code,
+            latitude = latitude,
+            longitude = longitude
+        )
+        val db = AppDatabase.getDatabase(this)
+        lifecycleScope.launch {
+            db.coordinatesDao().insert(coordinates)
+        }
     }
 
-
-
+    private fun readFileContentsDatabase(): List<List<String>> {
+        val fileName = "fuentes202503.csv"
+        return try {
+            openFileInput(fileName).bufferedReader().useLines { lines ->
+                lines.map { it.split(";").map(String::trim) }.toList()
+            }
+        } catch (e: IOException) {
+            listOf(listOf("Error reading file: ${e.message}"))
+        }
+    }
     override fun onBackPressed() {
         super.onBackPressed()
         onBackPressedDispatcher.onBackPressed()

@@ -20,6 +20,12 @@ import org.osmdroid.views.overlay.Marker
 import android.graphics.drawable.BitmapDrawable
 import androidx.core.content.ContextCompat
 import org.osmdroid.views.overlay.Polyline
+import androidx.lifecycle.lifecycleScope
+import com.example.madproject.room.AppDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
 
 
 
@@ -98,8 +104,31 @@ class OpenStreetsMapActivity : AppCompatActivity() {
 
 
 
+        loadDatabaseMarkers()
 
-
+    }
+    private fun loadDatabaseMarkers() {
+        val db = AppDatabase.getDatabase(this)
+        lifecycleScope.launch(Dispatchers.IO) {
+            val dbCoordinates = db.coordinatesDao().getAll()
+            val roomGeoPoints = dbCoordinates.map {
+                GeoPoint(it.latitude, it.longitude)
+            }
+            Log.d(TAG, "Coordenadas obtenidas de Room: $roomGeoPoints")
+            withContext(Dispatchers.Main) {
+                addDatabaseMarkers(map, roomGeoPoints, this@OpenStreetsMapActivity)
+            }
+        }
+    }
+    private fun addDatabaseMarkers(map: MapView, coords: List<GeoPoint>, context: Context) {
+        for (geoPoint in coords) {
+            val marker = Marker(map)
+            marker.position = geoPoint
+            marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+            marker.icon = ContextCompat.getDrawable(context, android.R.drawable.ic_menu_compass) as BitmapDrawable
+            marker.title = "Saved Coordinate"
+            map.overlays.add(marker)
+        }
     }
     fun addGymkhanaMarkers(map: MapView, coords: List<GeoPoint>, names: List<String>, context: Context) {
         for (i in coords.indices) {

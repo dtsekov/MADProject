@@ -65,6 +65,8 @@ class SecondActivity : AppCompatActivity() {
         val adapter = CoordinatesAdapter(this, readFileContents())
         listView.adapter = adapter
 
+
+
     }
 
     override fun onBackPressed() {
@@ -116,6 +118,8 @@ class SecondActivity : AppCompatActivity() {
             listOf(listOf("Error reading file: ${e.message}"))
         }
     }
+
+
 
 
 }
