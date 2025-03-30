@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -29,12 +30,16 @@ class ThirdActivity : AppCompatActivity() {
         val longitude = intent.getStringExtra("longitude")
         val altitude = intent.getStringExtra("altitude")
         Log.d(TAG, "Latitude: $latitude, Longitude: $longitude, Altitude: $altitude")
+
         val buttonToSecond: Button = findViewById(R.id.mainButton)
         buttonToSecond.setOnClickListener {
             val intent = Intent(this, SecondActivity::class.java)
             startActivity(intent)
             finish()
         }
+        val textView: TextView = findViewById(R.id.textView)
+        textView.text = "Latitude: $latitude, Longitude: $longitude, Altitude: $altitude"
+
 
 
 

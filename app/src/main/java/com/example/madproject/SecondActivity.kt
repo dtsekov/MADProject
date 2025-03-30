@@ -80,17 +80,17 @@ class SecondActivity : AppCompatActivity() {
             val timestampTextView: TextView = view.findViewById(R.id.tvTimestamp)
             val latitudeTextView: TextView = view.findViewById(R.id.tvLatitude)
             val longitudeTextView: TextView = view.findViewById(R.id.tvLongitude)
-            //val altitudeTextView: TextView = view.findViewById(R.id.tvAltitude)
+            val altitudeTextView: TextView = view.findViewById(R.id.tvAltitude)
             val item = coordinatesList[position]
             timestampTextView.text = formatTimestamp(item[0].toLong())
             latitudeTextView.text = formatCoordinate(item[1].toDouble())
             longitudeTextView.text = formatCoordinate(item[2].toDouble())
-            //altitudeTextView.text = formatCoordinate(item[3].toDouble())
+            altitudeTextView.text = formatCoordinate(item[3].toDouble())
             view.setOnClickListener {
                 val intent = Intent(context, ThirdActivity::class.java).apply {
                     putExtra("latitude", item[1])
                     putExtra("longitude", item[2])
-                    putExtra("altitude", item[2])
+                    putExtra("altitude", item[3])
                 }
                 context.startActivity(intent)
             }

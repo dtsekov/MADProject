@@ -221,7 +221,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
     override fun onLocationChanged(location: Location) {
         latestLocation = location
         val textView: TextView = findViewById(R.id.textView)
-        val locationText = "" + location.latitude + "" + location.longitude
+        val locationText = "" + location.latitude + "" + location.longitude + "" + location.altitude
         textView.text = locationText
         saveCoordinatesToFile(
             location.latitude,
