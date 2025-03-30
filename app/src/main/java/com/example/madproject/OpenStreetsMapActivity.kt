@@ -76,7 +76,8 @@ class OpenStreetsMapActivity : AppCompatActivity() {
 
         val startPoint = if (location != null) {
             Log.d(TAG, "onCreate: Location[${location.altitude}][${location.latitude}][${location.longitude}]")
-            GeoPoint(location.latitude, location.longitude)
+            //GeoPoint(location.latitude, location.longitude)
+            GeoPoint(40.42901050, -3.73263000)
         } else {
             Log.d(TAG, "onCreate: Location is null, using default coordinates")
             GeoPoint(40.389683644051864, -3.627825356970311)
@@ -84,7 +85,7 @@ class OpenStreetsMapActivity : AppCompatActivity() {
 
         map = findViewById(R.id.map)
         map.setTileSource(TileSourceFactory.MAPNIK)
-        map.controller.setZoom(5.0)
+        map.controller.setZoom(15.0)
         map.controller.setCenter(startPoint)
 
         // Add current location marker
