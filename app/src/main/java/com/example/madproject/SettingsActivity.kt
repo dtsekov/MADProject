@@ -22,16 +22,24 @@ class SettingsActivity : AppCompatActivity() {
 
         }
         val editTextUserIdentifier: EditText = findViewById(R.id.editTextUserIdentifier)
+        val editTextApiKey: EditText = findViewById(R.id.editTextApiKey)
         val buttonSave: Button = findViewById(R.id.buttonSave)
+
         // Load existing user identifier if available
         val sharedPreferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
         val userIdentifier = sharedPreferences.getString("userIdentifier", "")
+        val apiKey = sharedPreferences.getString("API_KEY", "")
+
         editTextUserIdentifier.setText(userIdentifier)
+        editTextApiKey.setText(apiKey)
+
         buttonSave.setOnClickListener {
             val newUserIdentifier = editTextUserIdentifier.text.toString()
+            val newApiKey = editTextApiKey.text.toString()
             if (newUserIdentifier.isNotBlank()) {
                 sharedPreferences.edit().apply {
                     putString("userIdentifier", newUserIdentifier)
+                    putString("API_KEY", newApiKey)
                     apply()
                 }
                 Toast.makeText(this, "User ID saved: $newUserIdentifier", Toast.LENGTH_LONG).show()

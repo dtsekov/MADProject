@@ -7,30 +7,39 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import android.Manifest
-import android.os.Build
+
 import android.util.Log
 import android.widget.Toast
 import android.app.AlertDialog
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
-import java.io.File
+
 import android.widget.Switch
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.widget.Toolbar
+
 
 import androidx.lifecycle.lifecycleScope
 import com.example.madproject.room2.AppDatabase
 import com.example.madproject.room2.CoordinatesEntity
 import kotlinx.coroutines.launch
+
+import retrofit2.*
+import retrofit2.converter.gson.GsonConverterFactory
+import com.example.madproject.network.*
+
+import android.widget.ImageView
+import com.bumptech.glide.Glide
 
 
 
@@ -46,6 +55,10 @@ class MainActivity : AppCompatActivity(), LocationListener {
     private val locationPermissionCode = 2
     private var latestLocation: Location? = null
     private lateinit var locationSwitch: Switch
+
+
+    private lateinit var weatherTextView: TextView
+    private lateinit var weatherIcon: ImageView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,6 +79,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
 
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
+        weatherIcon = findViewById(R.id.weatherIcon)
         locationSwitch = findViewById(R.id.locationSwitch)
         locationSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
@@ -137,6 +151,13 @@ class MainActivity : AppCompatActivity(), LocationListener {
         }
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+
+        weatherTextView = findViewById(R.id.weatherTextView)
+        getWeatherForecast(40.38982289563083, -3.627826205293675)
+
+
+
+
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
@@ -155,7 +176,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
 
 
 
-        private fun saveUserIdentifier(userIdentifier: String) {
+    private fun saveUserIdentifier(userIdentifier: String) {
         val sharedPreferences = this.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
         sharedPreferences.edit().apply {
             putString("userIdentifier", userIdentifier)
@@ -248,12 +269,14 @@ class MainActivity : AppCompatActivity(), LocationListener {
     override fun onLocationChanged(location: Location) {
         latestLocation = location
         val textView: TextView = findViewById(R.id.textView)
-        val locationText = "" + location.latitude + "" + location.longitude + "" + location.altitude
+        val locationText = "" + location.latitude + " " + location.longitude + " " + location.altitude
         textView.text = locationText
         saveCoordinatesToDatabase(location.latitude, location.longitude, location.altitude, System.currentTimeMillis())
         val toastText =
             "New location: ${location.latitude}, ${location.longitude}, ${location.altitude}"
         Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show()
+
+        getWeatherForecast(location.latitude, location.longitude)
     }
     private fun saveCoordinatesToDatabase(latitude: Double, longitude: Double, altitude: Double, timestamp: Long) {
         val coordinates = CoordinatesEntity(
@@ -267,6 +290,87 @@ class MainActivity : AppCompatActivity(), LocationListener {
             db.coordinatesDao().insert(coordinates)
         }
     }
+    private fun getWeatherForecast(lat: Double, lon: Double) {
+        if (!isNetworkAvailable()) {
+            Log.e(TAG, "No Internet connection")
+            Toast.makeText(this, "No Internet connection", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val apiKey = getApiKey() ?: return
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://api.openweathermap.org/data/2.5/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val service = retrofit.create(WeatherApiService::class.java)
+        val call = service.getWeatherForecast(lat, lon, 1, apiKey)
+
+        call.enqueue(object : Callback<WeatherResponse> {
+            override fun onResponse(call: Call<WeatherResponse>, response: Response<WeatherResponse>) {
+                if (response.isSuccessful) {
+                    val weatherResponse = response.body()
+                    weatherResponse?.let { showWeatherInfo(it) }
+                } else {
+                    Log.e(TAG, "Error en la respuesta: ${response.code()}")
+                    Toast.makeText(this@MainActivity, "Failed to fetch weather", Toast.LENGTH_SHORT).show()
+                }
+            }
+            override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
+                Log.e(TAG, "Error en la petición: ${t.message}")
+                Toast.makeText(this@MainActivity, "Error fetching weather", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+    private fun getApiKey(): String? {
+        val sharedPreferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+        return sharedPreferences.getString("API_KEY", null)
+    }
+    private fun showWeatherInfo(weatherResponse: WeatherResponse) {
+        val item = weatherResponse.list.firstOrNull()
+        val weatherText = StringBuilder()
+        if (item != null) {
+            val tempCelsius = item.main.temp - 273.15
+            val tempFormatted = String.format("%.1f", tempCelsius)
+            val iconUrl = "https://openweathermap.org/img/wn/${item.weather[0].icon}@4x.png"
+
+            weatherText.append("📍 ${item.name}\n")
+            weatherText.append("🌡 Temp: $tempFormatted°C\n")
+            weatherText.append("💨: ${item.weather[0].description}\n")
+            weatherText.append("🌫 Humidity: ${item.main.humidity}%\n\n")
+
+            weatherTextView.text = weatherText
+            Glide.with(this).load(iconUrl).into(weatherIcon)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val lat: Double
+        val lon: Double
+        if (latestLocation != null) {
+            lat = latestLocation!!.latitude
+            lon = latestLocation!!.longitude
+            Log.d(TAG, "onResume: Reading last coordinates -> $lat, $lon")
+        } else {
+            lat = 40.38982289563083
+            lon = -3.627826205293675
+            Log.d(TAG, "onResume: Coordinates not read yet. Using default coordinates -> $lat, $lon")
+        }
+        getWeatherForecast(lat, lon)
+    }
+
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val network = connectivityManager.activeNetwork ?: return false
+        val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+        return activeNetwork.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+    }
+
+
+
+
 
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
     override fun onProviderEnabled(provider: String) {}
