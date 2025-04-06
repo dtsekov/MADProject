@@ -11,8 +11,8 @@
         android:id="@+id/mainButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="132dp"
-        android:layout_marginTop="560dp"
+        android:layout_marginLeft="112dp"
+        android:layout_marginTop="16dp"
         android:text="Go to second activity"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -21,11 +21,65 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="56dp"
-        android:layout_marginTop="384dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="488dp"
         android:text="TextView"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etTimestamp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Timestamp"
+        app:layout_constraintTop_toBottomOf="@id/mainButton"
+        android:layout_margin="16dp"/>
+    <EditText
+        android:id="@+id/etLatitude"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Latitude"
+        app:layout_constraintTop_toBottomOf="@id/etTimestamp"
+        android:layout_margin="16dp"/>
+    <EditText
+        android:id="@+id/etLongitude"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Longitude"
+        app:layout_constraintTop_toBottomOf="@id/etLatitude"
+        android:layout_margin="16dp"/>
+    <EditText
+        android:id="@+id/etAltitude"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Altitude"
+        app:layout_constraintTop_toBottomOf="@id/etLongitude"
+        android:layout_margin="16dp"/>
+    <Button
+        android:id="@+id/buttonUpdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Update Coordinates"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#00FF00"
+        app:layout_constraintTop_toBottomOf="@id/etAltitude"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"/>
+    <!-- Botón para eliminar el registro -->
+    <Button
+        android:id="@+id/buttonDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete Coordinate"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#D32F2F"
+        app:layout_constraintTop_toBottomOf="@id/buttonUpdate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

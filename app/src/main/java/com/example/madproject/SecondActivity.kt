@@ -23,6 +23,11 @@ import java.util.Date
 import java.util.Locale
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
+import androidx.lifecycle.lifecycleScope
+import com.example.madproject.room2.AppDatabase
+import kotlinx.coroutines.launch
+
+
 
 class SecondActivity : AppCompatActivity() {
     private val TAG = "btaSecondActivity"
@@ -57,6 +62,8 @@ class SecondActivity : AppCompatActivity() {
         if (location != null) {
             Log.i(TAG, "onCreate: Location["+location.altitude+"]["+location.latitude+"]["+location.longitude+"][")
         }
+
+        /*
         val listView: ListView = findViewById(R.id.lvCoordinates)
         val headerView = layoutInflater.inflate(R.layout.listview_header, null)
 
@@ -64,7 +71,22 @@ class SecondActivity : AppCompatActivity() {
 
         val adapter = CoordinatesAdapter(this, readFileContents())
         listView.adapter = adapter
-
+        */
+        val listView: ListView = findViewById(R.id.lvCoordinates)
+        val headerView = layoutInflater.inflate(R.layout.listview_header, null)
+        listView.addHeaderView(headerView, null, false)
+        val db = AppDatabase.getDatabase(this)
+        // Obtener datos desde Room y crear el adaptador con los datos directamente
+        lifecycleScope.launch {
+            val dbCoordinates = db.coordinatesDao().getAll()
+            val roomCoordinates = dbCoordinates.map {
+                listOf(it.timestamp.toString(), it.latitude.toString(), it.longitude.toString(), it.altitude.toString())
+            }
+            Log.d(TAG, "Datos obtenidos de Room: $roomCoordinates")
+            // Instanciar el adaptador con los datos de Room directamente
+            val adapter = CoordinatesAdapter(this@SecondActivity, roomCoordinates)
+            listView.adapter = adapter // Asignar el adaptador al ListView
+        }
 
 
     }
@@ -84,12 +106,17 @@ class SecondActivity : AppCompatActivity() {
             val longitudeTextView: TextView = view.findViewById(R.id.tvLongitude)
             val altitudeTextView: TextView = view.findViewById(R.id.tvAltitude)
             val item = coordinatesList[position]
-            timestampTextView.text = formatTimestamp(item[0].toLong())
-            latitudeTextView.text = formatCoordinate(item[1].toDouble())
-            longitudeTextView.text = formatCoordinate(item[2].toDouble())
-            altitudeTextView.text = formatCoordinate(item[3].toDouble())
+            try {
+                timestampTextView.text = formatTimestamp(item[0].toLongOrNull() ?: 0L)
+                latitudeTextView.text = formatCoordinate(item[1].toDoubleOrNull() ?: 0.0)
+                longitudeTextView.text = formatCoordinate(item[2].toDoubleOrNull() ?: 0.0)
+                altitudeTextView.text = formatCoordinate(item[3].toDoubleOrNull() ?: 0.0)
+            } catch (e: Exception) {
+                Log.e("CoordinatesAdapter", "Error convirtiendo valores: ${e.message}")
+            }
             view.setOnClickListener {
                 val intent = Intent(context, ThirdActivity::class.java).apply {
+                    putExtra("timestamp", item[0])
                     putExtra("latitude", item[1])
                     putExtra("longitude", item[2])
                     putExtra("altitude", item[3])
@@ -98,6 +125,7 @@ class SecondActivity : AppCompatActivity() {
             }
             return view
         }
+
         private fun formatTimestamp(timestamp: Long): String {
             val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
             return formatter.format(Date(timestamp))

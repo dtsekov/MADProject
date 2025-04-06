@@ -27,6 +27,12 @@ import android.widget.Switch
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.widget.Toolbar
 
+import androidx.lifecycle.lifecycleScope
+import com.example.madproject.room2.AppDatabase
+import com.example.madproject.room2.CoordinatesEntity
+import kotlinx.coroutines.launch
+
+
 
 
 
@@ -38,7 +44,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
     private val TAG = "btaMainActivity"
     private lateinit var locationManager: LocationManager
     private val locationPermissionCode = 2
-    private lateinit var latestLocation: Location
+    private var latestLocation: Location? = null
     private lateinit var locationSwitch: Switch
 
 
@@ -244,31 +250,23 @@ class MainActivity : AppCompatActivity(), LocationListener {
         val textView: TextView = findViewById(R.id.textView)
         val locationText = "" + location.latitude + "" + location.longitude + "" + location.altitude
         textView.text = locationText
-        saveCoordinatesToFile(
-            location.latitude,
-            location.longitude,
-            location.altitude,
-            System.currentTimeMillis()
-        )
+        saveCoordinatesToDatabase(location.latitude, location.longitude, location.altitude, System.currentTimeMillis())
         val toastText =
             "New location: ${location.latitude}, ${location.longitude}, ${location.altitude}"
         Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show()
     }
-
-    private fun saveCoordinatesToFile(
-        latitude: Double,
-        longitude: Double,
-        altitude: Double,
-        timestamp: Long
-    ) {
-        val fileName = "gps_coordinates.csv"
-        val file = File(filesDir, fileName)
-        val formattedLatitude = String.format("%.4f", latitude)
-        val formattedLongitude = String.format("%.4f", longitude)
-        val formattedAltitude = String.format("%.2f", altitude)
-        file.appendText("$timestamp;$formattedLatitude;$formattedLongitude;$formattedAltitude\n")
+    private fun saveCoordinatesToDatabase(latitude: Double, longitude: Double, altitude: Double, timestamp: Long) {
+        val coordinates = CoordinatesEntity(
+            timestamp = timestamp,
+            latitude = latitude,
+            longitude = longitude,
+            altitude = altitude
+        )
+        val db = AppDatabase.getDatabase(this)
+        lifecycleScope.launch {
+            db.coordinatesDao().insert(coordinates)
+        }
     }
-
 
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
     override fun onProviderEnabled(provider: String) {}
