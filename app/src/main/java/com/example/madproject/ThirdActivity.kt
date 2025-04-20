@@ -15,8 +15,8 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 
 
-import com.example.madproject.room2.AppDatabase
-import com.example.madproject.room2.CoordinatesEntity
+import com.example.madproject.room2.AppDatabase2
+import com.example.madproject.room2.CoordinatesEntity2
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import android.widget.EditText
@@ -108,7 +108,7 @@ class ThirdActivity : AppCompatActivity() {
             .show()
     }
     private fun deleteCoordinate(timestamp: Long) {
-        val db = AppDatabase.getDatabase(this)
+        val db = AppDatabase2.getDatabase(this)
         lifecycleScope.launch(Dispatchers.IO) {
             db.coordinatesDao().deleteWithTimestamp(timestamp)
             Log.d(TAG, "Coordinate with timestamp $timestamp deleted.")
@@ -135,12 +135,12 @@ class ThirdActivity : AppCompatActivity() {
     }
 
     private fun updateCoordinate() {
-        val db = AppDatabase.getDatabase(this)
+        val db = AppDatabase2.getDatabase(this)
         lifecycleScope.launch(Dispatchers.IO) {
             val timestamp = etTimestamp.text.toString().toLong()
             val existingCoordinate = db.coordinatesDao().getCoordinateByTimestamp(timestamp)
             if (existingCoordinate != null) { // ✅ Verifica si existe antes de actualizar
-                val updatedCoordinate = CoordinatesEntity(
+                val updatedCoordinate = CoordinatesEntity2(
                     timestamp = timestamp, // Mantiene el mismo timestamp
                     latitude = etLatitude.text.toString().toDouble(),
                     longitude = etLongitude.text.toString().toDouble(),

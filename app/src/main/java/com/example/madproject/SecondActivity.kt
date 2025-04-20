@@ -23,7 +23,7 @@ import java.util.Date
 import java.util.Locale
 
 import androidx.lifecycle.lifecycleScope
-import com.example.madproject.room2.AppDatabase
+import com.example.madproject.room2.AppDatabase2
 import kotlinx.coroutines.launch
 
 
@@ -74,7 +74,7 @@ class SecondActivity : AppCompatActivity() {
         val listView: ListView = findViewById(R.id.lvCoordinates)
         val headerView = layoutInflater.inflate(R.layout.listview_header, null)
         listView.addHeaderView(headerView, null, false)
-        val db = AppDatabase.getDatabase(this)
+        val db = AppDatabase2.getDatabase(this)
         // Obtener datos desde Room y crear el adaptador con los datos directamente
         lifecycleScope.launch {
             val dbCoordinates = db.coordinatesDao().getAll()

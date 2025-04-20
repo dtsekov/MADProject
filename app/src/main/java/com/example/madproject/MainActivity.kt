@@ -30,9 +30,11 @@ import androidx.appcompat.widget.Toolbar
 
 
 import androidx.lifecycle.lifecycleScope
-import com.example.madproject.room2.AppDatabase
-import com.example.madproject.room2.CoordinatesEntity
+import com.example.madproject.room.AppDatabase
+import com.example.madproject.room.CoordinatesEntity
 import kotlinx.coroutines.launch
+import com.example.madproject.room2.AppDatabase2
+import com.example.madproject.room2.CoordinatesEntity2
 
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
@@ -40,16 +42,8 @@ import com.example.madproject.network.*
 
 import android.widget.ImageView
 import com.bumptech.glide.Glide
-
-
-
-
-
-
-
-
-
-
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 
 
 class MainActivity : AppCompatActivity(), LocationListener {
@@ -75,6 +69,9 @@ class MainActivity : AppCompatActivity(), LocationListener {
         setContentView(R.layout.activity_main)
         Log.d(TAG, "onCreate: Starting main activity.")
         //launchSignInFlow()
+        val database = AppDatabase.getDatabase(this)
+        seedDatabaseIfEmpty(this, database)
+
 
         val userIdentifier = getUserIdentifier()
         if (userIdentifier == null) {
@@ -82,6 +79,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
             showUserIdentifierDialog()
         } else {
             // If yes, use it or show it
+
             val textView: TextView = findViewById(R.id.userNameTextView)
             textView.text = userIdentifier
             Toast.makeText(this, "User ID: $userIdentifier", Toast.LENGTH_LONG).show()
@@ -187,6 +185,33 @@ class MainActivity : AppCompatActivity(), LocationListener {
         }
     }
 
+    private fun seedDatabaseIfEmpty(context: Context, db: AppDatabase) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val dao = db.coordinatesDao()
+            if (dao.getCount() == 0) {
+                val coordinates = mutableListOf<CoordinatesEntity>()
+                context.assets.open("fountain_coordinates.csv").bufferedReader().useLines { lines ->
+                    lines.drop(1).forEach { line -> // Skip CSV header
+                        val parts = line.split(";")
+                        if (parts.size == 2) {
+
+                            val lat = parts[0].toDoubleOrNull()
+                            val lon = parts[1].toDoubleOrNull()
+                            if (lat != null && lon != null) {
+                                coordinates.add(
+                                    com.example.madproject.room.CoordinatesEntity(
+                                        lat,
+                                        lon
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }
+                dao.insertAll(coordinates)
+            }
+        }
+    }
 
 
     private fun saveUserIdentifier(userIdentifier: String) {
@@ -290,13 +315,13 @@ class MainActivity : AppCompatActivity(), LocationListener {
         getWeatherForecast(location.latitude, location.longitude)
     }
     private fun saveCoordinatesToDatabase(latitude: Double, longitude: Double, altitude: Double, timestamp: Long) {
-        val coordinates = CoordinatesEntity(
+        val coordinates = CoordinatesEntity2(
             timestamp = timestamp,
             latitude = latitude,
             longitude = longitude,
             altitude = altitude
         )
-        val db = AppDatabase.getDatabase(this)
+        val db = AppDatabase2.getDatabase(this)
         lifecycleScope.launch {
             db.coordinatesDao().insert(coordinates)
         }

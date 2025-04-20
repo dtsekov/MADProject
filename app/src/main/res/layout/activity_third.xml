@@ -70,6 +70,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"/>
+    <Button
+        android:id="@+id/addReportButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Report"
+        app:layout_constraintTop_toTopOf="@id/editTextReport"
+        app:layout_constraintBottom_toBottomOf="@id/editTextReport"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/editTextReport"/>
+
+
+    <EditText
+        android:id="@+id/editTextReport"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Report name"
+        app:layout_constraintTop_toTopOf="@id/buttonDelete"
+        app:layout_constraintBottom_toBottomOf="@id/buttonDelete"
+        app:layout_constraintStart_toEndOf="@id/buttonDelete"
+        app:layout_constraintEnd_toStartOf="@id/addReportButton"/>
 
 
 
