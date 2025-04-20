@@ -59,7 +59,7 @@ Include screenshots of the app in action. You can upload the images to GitHub an
 ## Demo Video
  
 <a href="https://upm365-my.sharepoint.com/:v:/g/personal/d_tsekov_alumnos_upm_es/EdP7nfes7FJCldnBelROnUQBm704poDh5RAd2RkS1sc5bQ?e=osc5Th&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D">
-Vide demo of app. 
+Demo video of the app. 
 </a>
 
 ## Features
@@ -70,7 +70,6 @@ Vide demo of app.
 - Storage of location timestamps.
 
 **technical**
-in your repo. For example:
 - Persistence in shared preferences Ref: [Source code](https://github.com/dtsekov/MADProject/blob/main/app/src/main/java/com/example/madproject/SettingsActivity.kt)
 - Persistence in Room database. Ref: [Source code](https://github.com/dtsekov/MADProject/tree/main/app/src/main/java/com/example/madproject/room)
 - Maps: Openstreetmaps. Ref: [Source code](https://github.com/dtsekov/MADProject/blob/main/app/src/main/java/com/example/madproject/OpenStreetsMapActivity.kt)
