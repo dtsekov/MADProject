@@ -38,13 +38,6 @@ android {
 
 
 dependencies {
-
-
-
-
-
-    implementation("com.google.firebase:firebase-database-ktx:20.3.0")
-
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.squareup.moshi:moshi:1.15.0")
     implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
