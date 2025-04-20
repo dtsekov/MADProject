@@ -49,12 +49,20 @@ import com.bumptech.glide.Glide
 
 
 
+
+
+
 class MainActivity : AppCompatActivity(), LocationListener {
     private val TAG = "btaMainActivity"
     private lateinit var locationManager: LocationManager
     private val locationPermissionCode = 2
     private var latestLocation: Location? = null
     private lateinit var locationSwitch: Switch
+
+
+    companion object {
+        private const val RC_SIGN_IN = 123
+    }
 
 
     private lateinit var weatherTextView: TextView
@@ -66,6 +74,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
         Log.d(TAG, "onCreate: Starting main activity.")
+        //launchSignInFlow()
 
         val userIdentifier = getUserIdentifier()
         if (userIdentifier == null) {
@@ -73,6 +82,8 @@ class MainActivity : AppCompatActivity(), LocationListener {
             showUserIdentifierDialog()
         } else {
             // If yes, use it or show it
+            val textView: TextView = findViewById(R.id.userNameTextView)
+            textView.text = userIdentifier
             Toast.makeText(this, "User ID: $userIdentifier", Toast.LENGTH_LONG).show()
         }
 
@@ -113,10 +124,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
             intent.putExtra("locationBundle", bundle)
             startActivity(intent)
         }
-        val userIdentifierButton: Button = findViewById(R.id.user)
-        userIdentifierButton.setOnClickListener {
-            showUserIdentifierDialog()
-        }
+
 
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
         navView.setOnNavigationItemSelectedListener { item ->
@@ -169,6 +177,11 @@ class MainActivity : AppCompatActivity(), LocationListener {
                 startActivity(Intent(this, SettingsActivity::class.java))
                 true
             }
+            R.id.action_logout -> {
+                
+                true
+            }
+
 
             else -> super.onOptionsItemSelected(item)
         }
@@ -268,9 +281,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
 
     override fun onLocationChanged(location: Location) {
         latestLocation = location
-        val textView: TextView = findViewById(R.id.textView)
-        val locationText = "" + location.latitude + " " + location.longitude + " " + location.altitude
-        textView.text = locationText
+
         saveCoordinatesToDatabase(location.latitude, location.longitude, location.altitude, System.currentTimeMillis())
         val toastText =
             "New location: ${location.latitude}, ${location.longitude}, ${location.altitude}"
@@ -359,6 +370,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
             Log.d(TAG, "onResume: Coordinates not read yet. Using default coordinates -> $lat, $lon")
         }
         getWeatherForecast(lat, lon)
+
     }
 
     private fun isNetworkAvailable(): Boolean {
@@ -367,6 +379,11 @@ class MainActivity : AppCompatActivity(), LocationListener {
         val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
         return activeNetwork.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
     }
+
+
+
+
+
 
 
 

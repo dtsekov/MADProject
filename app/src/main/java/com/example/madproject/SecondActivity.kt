@@ -21,7 +21,6 @@ import android.widget.ListView
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import com.google.android.material.bottomnavigation.BottomNavigationView
 
 import androidx.lifecycle.lifecycleScope
 import com.example.madproject.room2.AppDatabase

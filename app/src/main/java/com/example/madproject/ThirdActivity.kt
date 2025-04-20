@@ -4,14 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import android.widget.TextView
+
 import androidx.appcompat.app.AlertDialog
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import java.io.IOException
+
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 
@@ -51,7 +50,7 @@ class ThirdActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-        val textView: TextView = findViewById(R.id.textView)
+
 
 
         etTimestamp = findViewById(R.id.etTimestamp)
@@ -66,7 +65,7 @@ class ThirdActivity : AppCompatActivity() {
         val latitude = intent.getStringExtra("latitude")
         val longitude = intent.getStringExtra("longitude")
         val altitude = intent.getStringExtra("altitude")
-        textView.text = "Latitude: $latitude, Longitude: $longitude, Altitude: $altitude"
+
         Log.d(TAG, "Latitude: $latitude, Longitude: $longitude, Altitude: $altitude")
 
 

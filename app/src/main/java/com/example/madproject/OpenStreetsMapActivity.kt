@@ -8,13 +8,12 @@ import androidx.core.view.WindowInsetsCompat
 import android.location.Location
 import android.util.Log
 
-import androidx.activity.enableEdgeToEdge
+
 
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
-import android.Manifest
 import android.content.Context
 import android.graphics.Color
 import org.osmdroid.views.overlay.Marker
@@ -30,11 +29,8 @@ import com.example.madproject.network.OSRMResponse
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.Types
-import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+
 
 
 
@@ -70,8 +66,7 @@ class OpenStreetsMapActivity : AppCompatActivity() {
 
         val startPoint = if (currentLocation != null) {
             Log.d(TAG, "onCreate: Location[${currentLocation!!.altitude}][${currentLocation!!.latitude}][${currentLocation!!.longitude}]")
-            //GeoPoint(location.latitude, location.longitude)
-            GeoPoint(40.42902050, -3.73263000)
+            GeoPoint(currentLocation!!.latitude, currentLocation!!.longitude)
         } else {
             Log.d(TAG, "onCreate: Location is null, using default coordinates")
             GeoPoint(40.389683644051864, -3.627825356970311)
@@ -79,7 +74,7 @@ class OpenStreetsMapActivity : AppCompatActivity() {
 
         map = findViewById(R.id.map)
         map.setTileSource(TileSourceFactory.MAPNIK)
-        map.controller.setZoom(15.0)
+        map.controller.setZoom(18.0)
         map.controller.setCenter(startPoint)
 
         // Add current location marker
@@ -199,11 +194,10 @@ class OpenStreetsMapActivity : AppCompatActivity() {
                         mapView.overlays.remove(it)
                         mapView.invalidate()
                     }
-                    //val startLat = currentLocation!!.latitude
-                    //val startLon = currentLocation!!.longitude
+                    val startLat = currentLocation!!.latitude
+                    val startLon = currentLocation!!.longitude
 
-                    val startLat = 40.42902050
-                    val startLon = -3.73263000
+
                     val endLat = selectedPoint.latitude
                     val endLon = selectedPoint.longitude
 
