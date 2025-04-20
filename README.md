@@ -75,9 +75,9 @@ Demo video of the app.
 - Maps: Openstreetmaps. Ref: [Source code](https://github.com/dtsekov/MADProject/blob/main/app/src/main/java/com/example/madproject/OpenStreetsMapActivity.kt)
 - Restful API Openweathermaps, we use a get call to open weather maps giving them our current location and getting in return weather information. Ref: [Source code](https://github.com/dtsekov/MADProject/blob/main/app/src/main/java/com/example/madproject/network/WeatherApiService.kt)
 - Restful API OSRM, used to get the coordinates list of the shortest route to drinking fountains from current location so we can paint it on the map. Ref: [Source code](https://github.com/dtsekov/MADProject/blob/main/app/src/main/java/com/example/madproject/network/OSRMResponse.kt)
-- Menu: Toolbar
-- Menu: Bottom navigation
-- Sensors: GPS coordinates to access current location 
+- Menu: Toolbar Ref: [Source code](https://github.com/dtsekov/MADProject/blob/main/app/src/main/res/menu/toolbar_menu.xml)
+- Menu: Bottom navigation Ref: [Source code](https://github.com/dtsekov/MADProject/blob/main/app/src/main/res/menu/bottom_nav_menu.xml)
+- Sensors: GPS coordinates to access current location
 
 ## How to Use
 As a first time user it is very simple to get started. First enter your UserID which you can change at any time later. After that the only important thing you need to do is enable location permission with the switch button on the main page. After that you can access the rest of the app by pressing on the navigation buttons, either the ones on the main page or the ones in the bottom navigation menu. You can go to the map and on the screen you will see markers displaying the location of the fountains near you and your current location. By pressing on any of the fountains the shortest route will be drawn on the map. If you want another fountain just press on it, the app will automatically remove the previous route and draw the new one. You can also press on your current location marker to clear any routes on your map. The only thing left is the second activity or as the bottom navigation calls it the Collection tab. In here you will see a list of all your location changes history where you will be able to edit it if you want or delete coordinates from the list.
