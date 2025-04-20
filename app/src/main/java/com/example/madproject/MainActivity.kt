@@ -175,10 +175,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
                 startActivity(Intent(this, SettingsActivity::class.java))
                 true
             }
-            R.id.action_logout -> {
-                
-                true
-            }
+
 
 
             else -> super.onOptionsItemSelected(item)
