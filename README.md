@@ -1,7 +1,7 @@
 # MADProject
 
 ## Workspace 
-Github:  
+GitHub:  
 - Repository: https://github.com/dtsekov/MADProject
 - Releases: https://github.com/dtsekov/MADProject/releases   
 
@@ -21,7 +21,7 @@ The application provides a fast and convenient way to find a nearby source of dr
     </td>
     <td>
       <img src="img/2.png" width="80%" alt="Image"/>
-      <p align="center">This is the main screen of the aplication, from here you can first see in the middle is the real time weather information based on your current location, if you havent enabled location permissions yet with the toggle button above the weather information, the application will use a default location which is Campus Sur of UPM in Vallecas. From here we can navigate either to the second activity, the Map activity or open the toolbar menu and navigate to the settings activity. We also have the bottom navigation menu from which we can go to the home screen, the map activity, or jump to the second activity.</p>
+      <p align="center">This is the main screen of the application, from here you can first see in the middle is the real time weather information based on your current location, if you haven't enabled location permissions yet with the toggle button above the weather information, the application will use a default location which is Campus Sur of UPM in Vallecas. From here we can navigate either to the second activity, the Map activity or open the toolbar menu and navigate to the settings activity. We also have the bottom navigation menu from which we can go to the home screen, the map activity, or jump to the second activity.</p>
     </td>
   </tr>
   <tr>
