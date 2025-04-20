@@ -12,7 +12,6 @@ Workspace: https://upm365.sharepoint.com/sites/MADProject/SitePages/Tracking.asp
 The application provides a fast and convenient way to find a nearby source of drinking water. In addition to offering other features, the main focus of the app is to display the closest drinking water fountains and, upon selecting one, show the shortest route to reach it. Such applications are typically developed by companies that display only their own water fountains. In contrast, my application uses an open database from the city of Madrid to show all available public drinking fountains. By focusing exclusively on drinking water fountains, it simplifies the process of finding one, making it quick, easy, and efficient.
 
 ## Screenshots and navigation
-Include screenshots of the app in action. You can upload the images to GitHub and then reference them here using Markdown or HTML syntax:
 
 <table>
   <tr>
