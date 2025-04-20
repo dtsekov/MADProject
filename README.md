@@ -62,13 +62,13 @@ Demo video of the app.
 </a>
 
 ## Features
-**functional**
+**Functional**
 - Search for drinking water fountains in Madrid.
 - Shortest route to water fountains.
 - Real-time weather information.
 - Storage of location timestamps.
 
-**technical**
+**Technical**
 - Persistence in shared preferences Ref: [Source code](https://github.com/dtsekov/MADProject/blob/main/app/src/main/java/com/example/madproject/SettingsActivity.kt)
 - Persistence in Room database. Ref: [Source code](https://github.com/dtsekov/MADProject/tree/main/app/src/main/java/com/example/madproject/room)
 - Maps: Openstreetmaps. Ref: [Source code](https://github.com/dtsekov/MADProject/blob/main/app/src/main/java/com/example/madproject/OpenStreetsMapActivity.kt)
